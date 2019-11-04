@@ -3,13 +3,30 @@
 <?php ob_start(); ?>
 <!-- end of starting -->
 
-<h1>  MyBooks </h1>
-<p> Accueil</p>
-
-
+<?php
+    $firstBook = $books[0];
+    $firstBook = $books[1];
+    $firstBook = $books[2];
+    $firstBook = $books[3];
+    $books=
+?>
+   
 <div class="container">
-    <span class="newboobs"><h2> Nouveautés Livres</h2></span>
 
+        <div class="card" style="width: 18rem;">
+        <span class="newboobs"><h1> Nouveautés Livres</h1></span>
+            <img class="card-img-top" src="<?php echo $firstBook['imageLink']?>" alt="books picture">
+            <div class="card-body">
+                <h2 class="card-title"><?php $firstBook ['title']?></h2>
+                <p class="card-text"><?php echo $firstBook['author']?></p>
+                <a href="#" class="btn btn-primary">Ajouter au panier</a>                                            
+
+            </div>
+            
+        
+   
+        </div>
+   
 
 </div>
 
