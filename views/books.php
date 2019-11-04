@@ -7,13 +7,13 @@
 <p> Bienvenue sur la page des livres</p>
 
 <ul>
-    <?php
-    foreach ($books as $book) {
-       
-        echo'<li>' . $book['title'] . '</li>';
-        
-    }
-    ?>
+    <?php foreach ($books as $book) { ?>
+       <li>
+           <a href="?action=book&id=<?php echo $book['id']; ?>">
+                <?php echo $book['title']; ?>
+            </a>
+        </li>
+    <?php } ?>
 </u>
 
 
