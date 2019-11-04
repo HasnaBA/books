@@ -6,16 +6,26 @@
 <h1> Liste des livres </h1>
 <p> Bienvenue sur la page des livres</p>
 
-<ul>
-    <?php foreach ($books as $book) { ?>
-       <li>
-           <a href="?action=book&id=<?php echo $book['id']; ?>">
-                <?php echo $book['title']; ?>
-            </a>
-        </li>
-    <?php } ?>
-</u>
-
+<div class="container">   
+    <div class='row'> 
+        <div class="col-md-6">
+            <ul>
+            
+                <?php foreach ($books as $book) { ?>
+                
+                    <div class="card" style="width: 18rem;">
+                        <img src="<?php echo $books['imageLink']?>" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="<?php echo $book['id']; ?>"></h5>
+                                <p class="card-text"><?php echo $book['title']; ?></p>
+                                <a href="#" class="btn btn-primary">Ajouter au panier</a>
+                            </div>
+                    </div>
+                <?php } ?>
+            </ul>
+        </div>
+    </div>
+</div>
 
 
 
