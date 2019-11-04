@@ -1,0 +1,47 @@
+#title{
+    color: white !important;
+    font-size: 60px;
+    text-align: center;
+    font-family:'Jomolhari', serif;
+    text-align: center !important;
+}
+
+
+    
+#text-nav{   
+    color: white !important;
+    font-size: 25px;
+    text-align: center;
+    font-family:'Jomolhari', serif;
+    text-align: center !important;
+    padding:20px;
+    margin-left: 100px;
+}
+#search-nav{
+    right: 500px;
+    position: absolute;
+}
+.account{
+  
+    font-size: 50px;
+    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    right:50px;
+    position: absolute;
+    border-radius:100%;
+    color: white;
+}
+.account-client{
+    margin: 10px;
+}
+
+.favorite{
+    margin: 10px;
+}
+
+
+.shopping-list{
+    margin: 10px;
+}
