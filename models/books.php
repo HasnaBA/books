@@ -1,23 +1,37 @@
 <?php
-
+require_once('utiles/db.php');
 
 function getBooks()
 {
-    $file = file_get_contents('json/books.json');
-    $books = json_decode($file,true);
-    return $books;
+    $db = dbConnect();
+    $stmt = $db->prepare('SELECT /* slectionne b.tout*/
+        books.*,
+        authors.name AS author
+        FROM books
+        LEFT JOIN authors 
+        ON books.author_id = authors.id /*indique ou faire la correspondance*/
+    ');
+
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getBook($id)
 
 {
-    $file = file_get_contents('json/books.json');
-    $books = json_decode($file,true);
-    $result = null;
-        foreach($books as $book) {  ///je liste tous les books et si le bon id match a l' id recherché
-            if ($book['id'] === $id) {
-            $result = $book;
-        }
-    }
-   return $result;
+    $db = dbConnect(); /*connexion */
+    $stmt = $db->prepare('SELECT /* slectionne b.tout*/
+        books.*,
+        authors.name AS author
+        FROM books
+        LEFT JOIN authors 
+        ON books.author_id = authors.id /*indique ou faire la correspondance*/
+        WHERE books.id = :id 
+    ');
+    $stmt->bindParam(':id' , $id, PDO::PARAM_INT);
+
+    $stmt->execute();
+    return $stmt->fetch();
+
 }

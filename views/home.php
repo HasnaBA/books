@@ -5,25 +5,26 @@
 
 <?php
     $firstBook = $books[0];
-    $firstBook = $books[1];
-    $firstBook = $books[2];
-    $firstBook = $books[3];
-    $books=
+    $secondBook = $books[1];
+    $thirdBook = $books[2];
+    $fourthBook = $books[3];
+
 ?>
    
 <div class="container">
+    <div class="row">
+        <div class="col md-4">
+            <div class="card" style="width: 18rem;">
+            <span class="newboobs"><h1> Nouveautés Livres</h1></span>
+                <img class="card-img-top" src="<?php echo $firstBook['imageLink']?>" alt="books picture">
+                <div class="card-body">
+                    <h2 class="card-title"><?php $firstBook ['title']?></h2>
+                    <p class="card-text"><?php echo $firstBook['author']?></p>
+                    <a href="#" class="btn btn-primary">Ajouter au panier</a>                                            
 
-        <div class="card" style="width: 18rem;">
-        <span class="newboobs"><h1> Nouveautés Livres</h1></span>
-            <img class="card-img-top" src="<?php echo $firstBook['imageLink']?>" alt="books picture">
-            <div class="card-body">
-                <h2 class="card-title"><?php $firstBook ['title']?></h2>
-                <p class="card-text"><?php echo $firstBook['author']?></p>
-                <a href="#" class="btn btn-primary">Ajouter au panier</a>                                            
-
-            </div>
-            
-        
+                </div>
+        </div>    
+    </div>  
    
         </div>
    

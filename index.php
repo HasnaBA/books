@@ -1,6 +1,5 @@
 <?php
 
-$db=new PDO('mysql:host=localhost;dbname=books', 'root');
 if (!isset($_GET['action'])) {
   require('controllers/home.php');
   showHome();
