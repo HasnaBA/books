@@ -1,7 +1,7 @@
 <?php
 
 
-
+$limit = 20;
 
 require_once('utiles/db.php');
 
@@ -21,29 +21,23 @@ function countBooks ()
 
     $stmt->execute(); //execute
 
-    return $stmt->fetchColumn();//return fetchALL(retourn tout),fetchColumn(retoutnre le nbr de colonne)
+    return $stmt->fetchColumn();//return fetchALL(retourne tout),fetchColumn(retoutnre le nbr de colonne)
 
 }
 
 function getBooks()
 {
-    $limit = 20;
+    global $limit;
 
     $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-
+    $db = dbConnect();
     $count = countBooks();
     $offset = ($page - 1)  * $limit; // Calculate the offset for the query
 
-  
-
+    
    
 
     $db = dbConnect();
-   
-   
-
-    //ending pagination
-
 
     $stmt = $db->prepare('SELECT /* slectionne b.tout*/
         books.*,
@@ -61,6 +55,9 @@ function getBooks()
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+  //ending pagination
+
+
 
 function getBook($id)
 
@@ -80,4 +77,7 @@ function getBook($id)
     return $stmt->fetch();
 
 }
+
+ 
+
 ?>

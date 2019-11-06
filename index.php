@@ -9,7 +9,8 @@ if (!isset($_GET['action'])) {
   switch ($action) {
     case 'books': 
     require_once('controllers/books.php');
-    listBooks();
+    $active_pages = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+    listBooks($active_pages);
     break;
 
     case 'book': // creation page pour que des qu' on clique sur un livre ca nous mene dans la page du livre

@@ -2,7 +2,7 @@
 <?php $title="liste des livres"; ?> 
 <?php ob_start(); ?>
 <!-- end of starting -->
-<
+
 <style>
 
 *{
@@ -66,8 +66,14 @@ h1{
     font-size: 60px;
     border-bottom-style: solid;
 }
-</style>
+#numpages{
+  
+   
+   font-size:22px;
+}
 
+
+</style>
 
 <div class="container-fluid">
     <div class="container"> 
@@ -97,14 +103,40 @@ h1{
             </div>
     </div>
 
+    <nav aria-label="Page navigation ">
+        <ul id="numpages" class="pagination justify-content-center mt-4 ">
+            
+    <!--creation des liens pages--> 
+    <?php for ($i=1; $i <= $total_pages ; $i++) {
+        if ($i === $active_page) {
+            echo "<li class='page-item disabled'><a class='page-link' href=''>".$i."</a></li>";
+        }else {
+          echo "<li class='page-item '><a class='page-link' href='?action=books&page=".$i."'>".$i."</a></li>";
+        }
+      } 
+    ?>
+                
+                
+                
+                
+        </ul>
+    </nav>
+
 </div>
 
 
 
 
-<pre>
-    <?php var_dump($books); ?>
-</pre>
+ 
+
+
+<footer class='mt-4'>
+   
+       
+</footer>
+
+
+
 <!-- ending each page -->
 <?php $content=ob_get_clean();?>
 <?php require ('public/index.php');?>

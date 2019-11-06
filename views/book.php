@@ -1,32 +1,38 @@
 <?php $title="liste des livres"; ?> 
 <?php ob_start(); ?>
 
+<style>
+.container{
+    background-color: grey;
+}
+.title{
+    font-family: 'Jomolhari', serif;
+    font-size: 25px ;
+ 
+}
+
+
+
+
+
+
+</style>
+
+
 
 
 
 
 
 <div class="container-fluid">
-    <div class="container"> 
-    <h1> Livre</h1>    
+    <div  class="container"> 
         <div class="row">
-            <?php  echo $book['title']; ?>  
+             
                 <div class="col-md-3 mt-4">
-                    <div id="size">
+                <span class="title"><?php  echo $book['title']; ?></span> 
+                    <div >
                         <img src="<?php echo $book['image']?>" class="card-img-top" alt="...">
-                    </div>
-                        <div class="card-body">
-                            <h5>
-                            <?php  echo $book['title']; ?>
-                            <?php  echo $book['author']; ?>
-
-                            </h5>
-                            <p class="card-text"> <?php echo $book['author']; ?> <span class= "autheur" >(autheur) </span></p>
-                        </div>
-                        <div class="card-footer text-center">
-                            <a href="#" class="btn btn-primary">Ajouter au panier</a>
-                        </div>
-                    </div>
+                        
                 </div>
     
             
