@@ -5,16 +5,6 @@ require_once('../utiles/db.php'); //rappel le dossier utiles où il y a la conne
 $db = dbConnect(); //
 
 $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
-if ($id) {   //edit un livre
-    echo $id;
-
-    $stmt = $db->prepare('SELECT * FROM `books` WHERE id = :id'); //statement pour preparer une base de donnee, select tout from authors
-
-    $stmt->bindParam(':id', $id);
-    $stmt->execute(); //execute le statement
-
-    $book = $stmt->fetch(PDO::FETCH_ASSOC);
-}
 
 
 
@@ -27,6 +17,9 @@ $authors = $stmt->fetchAll(PDO::FETCH_ASSOC); //stock le statement dans variable
 
 
 if (isset($_POST['book'])) {
+
+    $id = isset($_POST['id']) ? (int) $_POST['id'] : null;
+
     $description = (string) $_POST['description'];
     $auteur_id = (string) $_POST['auteur_id'];
     $page = (int) $_POST['pages'];
@@ -37,35 +30,54 @@ if (isset($_POST['book'])) {
     $country = (string) $_POST['country'];
     $title = (string) $_POST['title']; //recupere le titre et le mettre en string
     $maxTitleLength = 255;
+    if (!$title) {
+        throw new Exception ('Invalid title');
+    }
     if (strlen($title) > $maxTitleLength) {
         $title = substr($title, 0, $maxTitleLenght);
     }
     if (!preg_match('/^(http|https):\/\/([a-z]{2})\.wikipedia\.org\/([a-zA-Z0-9-_\/%:]+)?/i', $wikipediaLink)) {
         $wikipediaLink = '';
     }
+    if ($id) {
+        $stmt = $db->prepare('UPDATE 
+            books 
+            SET 
+            title = :title, 
+            description = :description, 
+            author_id = :author_id, 
+            pages = :pages, 
+            wikipedia_link = :wikipedia_Link, 
+            year = :year, 
+            language = :language, 
+            country = :country 
+            WHERE id = :id
+        ');
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT); 
+    } else {
 
-
-    $stmt = $db->prepare('INSERT INTO 
-    `books` (
-        `title`, 
-        `description`, 
-        `author_id`, 
-        `pages`, 
-        `wikipedia_link`, 
-        `year`, 
-        `language`, 
-        `country`
-    )
-    VALUES (
-        :title,
-        :description,
-        :author_id,
-        :pages,
-        :year,
-        :language,
-        :country,
-        :wikipedia_Link
-    )');
+        $stmt = $db->prepare('INSERT INTO 
+        `books` (
+            `title`, 
+            `description`, 
+            `author_id`, 
+            `pages`, 
+            `wikipedia_link`, 
+            `year`, 
+            `language`, 
+            `country`
+        )
+        VALUES (
+            :title,
+            :description,
+            :author_id,
+            :pages,
+            :year,
+            :language,
+            :country,
+            :wikipedia_Link
+        )');
+    }
 
     $stmt->bindParam(':title', $title, PDO::PARAM_STR);
     $stmt->bindParam(':description', $description, PDO::PARAM_STR);
@@ -75,12 +87,29 @@ if (isset($_POST['book'])) {
     $stmt->bindParam(':language', $laguage, PDO::PARAM_STR);
     $stmt->bindParam(':country', $country, PDO::PARAM_STR);
     $stmt->bindParam(':wikipedia_Link', $wikipediaLink, PDO::PARAM_STR);
+    $stmt->bindParam(':wikipedia_Link', $wikipediaLink, PDO::PARAM_STR);
+
 
     $stmt->execute();
-    $id = $db->lastInsertId();
+
+    if (!$id) {
+        $id = $db->lastInsertId();
+        header('Location: ' . $_SERVER['REQUEST_URI'] . '?id=' .$id);
+    }
+
     var_dump($id);
 }
 
+if ($id) {   //edit un livre
+    echo $id;
+
+    $stmt = $db->prepare('SELECT * FROM `books` WHERE id = :id'); //statement pour preparer une base de donnee, select tout from authors
+
+    $stmt->bindParam(':id', $id);
+    $stmt->execute(); //execute le statement
+
+    $book = $stmt->fetch(PDO::FETCH_ASSOC);
+}
 
 ?>
 
@@ -130,15 +159,16 @@ if (isset($_POST['book'])) {
 </style>
 
 <body>
-    <form action="./" method="post">
+    <form action="./<?php echo isset($book) ? '?id=' . $book['id'] : ''; ?>" method="post">
 
         <div class="container">
-            <h1> Ajouter un Livre</h1>
+            <h1 class="mb-3 mt-3"> <?php echo !isset($book) ? "Ajouter un livre" : "Editer : " . $book['title']; ?></h1>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="title">Titre</label>
-                        <input name="title" value="<?php echo isset($book) ? $book['title'] : ''; ?>" maxlength="10" type="text" class="form-control" id="title" aria-describedby="titleHelp" placeholder="Titre du livre...">
+                        <input 
+                        required name="title" value="<?php echo isset($book) ? $book['title'] : ''; ?>" maxlength="10" type="text" class="form-control" id="title" aria-describedby="titleHelp" placeholder="Titre du livre...">
                         <small id="titleHelp" class="form-text text-muted">Titre du livre entre 0 et 255.</small>
                     </div>
 
@@ -164,7 +194,7 @@ if (isset($_POST['book'])) {
                     </div>
                     <div class="form-group">
                         <label for="pages">Nombre de pages</label>
-                        <input name="pages" type="number" step="1" min="0" class="form-control" id="pages" aria-describedby="pagesHelp" placeholder="nombre de pages">
+                        <input name="pages" value="<?php echo isset($book) ? $book['pages'] : ''; ?>" type="number" step="1" min="0" class="form-control" id="pages" aria-describedby="pagesHelp" placeholder="nombre de pages">
 
                     </div>
                 </div>
@@ -173,19 +203,19 @@ if (isset($_POST['book'])) {
 
                     <div class="form-group">
                         <label for="wikipedia_link">Lien Wikipedia</label>
-                        <input name="wikipedia_link" type="text" class="form-control" id="wikipedia_link" aria-describedby="Help" placeholder="Lien Wikipedia">
+                        <input name="wikipedia_link" value="<?php echo isset($book) ? $book['wikipedia_link'] : ''; ?>" type="text" class="form-control" id="wikipedia_link" aria-describedby="Help" placeholder="Lien Wikipedia">
                     </div>
                     <div class="form-group">
                         <label for="country">Pays</label>
-                        <input name="country" type="text" class="form-control" id="country" aria-describedby="Help" placeholder="Pays">
+                        <input name="country" value="<?php echo isset($book) ? $book['country'] : ''; ?>" type="text" class="form-control" id="country" aria-describedby="Help" placeholder="Pays">
                     </div>
                     <div id="structure" class="form-group">
                         <label for="language">Langage</label>
-                        <input name="language" type="text" class="form-control" id="language" aria-describedby="Help" placeholder="langue">
+                        <input name="language" value="<?php echo isset($book) ? $book['language'] : ''; ?>" type="text" class="form-control" id="language" aria-describedby="Help" placeholder="langue">
                     </div>
                     <div class="form-group">
                         <label for="year">Année de parution</label>
-                        <input name="year" type="number" class="form-control" id="year" aria-describedby="Help" placeholder="année de parution">
+                        <input name="year" value="<?php echo isset($book) ? $book['year'] : ''; ?>" type="number" class="form-control" id="year" aria-describedby="Help" placeholder="année de parution">
                     </div>
 
 
@@ -198,6 +228,7 @@ if (isset($_POST['book'])) {
 
             <div class="row">
                 <div class="col-md-12">
+                    <input type="hidden" value="<?php echo isset($book) ? $book['id'] : ''; ?>" name="id">
 
                     <button name="book" class="btn btn-primary" type="submit">Soumettre</button>
 
