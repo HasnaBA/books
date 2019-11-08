@@ -1,4 +1,12 @@
 <?php
+
+session_start();
+
+if (!isset($_SESSION['id'])) {
+    header('Location : ./');
+}
+
+
 require_once('../utiles/db.php'); //rappel le dossier utiles où il y a la connexion Mysql
 
 

@@ -1,4 +1,0 @@
-AuthName "Admin"
-AuthType Basic
-AuthUserFile "/home/hasna/Documents/project/php/books/admin/.htpasswd"
-Require valid-user
