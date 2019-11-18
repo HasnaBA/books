@@ -55,6 +55,7 @@
               <a class="dropdown-item" href="?path=languages&action=add">Ajouter une langue</a>
             </div>
           </li>
+          
         </ul>
       </div>
     </nav>
